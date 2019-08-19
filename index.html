@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+</head>
+<body>
+	
+	<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+	  <div class="navbar-brand">
+	    <div class="navbar-item">
+	      <span class="navbar-item has-text-white">Youtube MP3 Downloader</span>
+	    </div>
+	    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+	      <span aria-hidden="true"></span>
+	      <span aria-hidden="true"></span>
+	      <span aria-hidden="true"></span>
+	    </a>
+	  </div>
+	</nav>
+	<!-- Arama Kısımları-->
+	<div id="form">
+	<section class="section">
+		<div class="container">
+			<div class="columns is-centered">
+				<div class="column is-5">
+					<form v-on:submit.prevent="$emit('submit')">
+						<div class="field">
+							<input v-model="keyword" class="input is-rounded is-focused is-medium" type="text" placeholder="İndirmek istediğiniz videonun ismini girin." class="input" name="searchform">
+						</div>
+						<center>
+						<div class="field">
+							<button onClick='document.getElementById("js").style.display = "flex";' id="buton" @click="apiGonder" class="button is-rounded is-primary is-medium" type="submit">Ara!</button>
+						</div>
+						</center>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section id="js" style="display: none;" class="section">
+		<div class="container">
+			<div class="columns is-centered">
+				<div class="column is-5">
+					<div class="box" v-for="video in result.videos" >
+						<article class="media">
+							<div class="media-left">
+								<figure class="image is-128x128">
+								  <img v-bind:src="video.thumbnail">
+								</figure>
+							</div>
+							<div class="media-content" >
+								<div class="content">
+									<h5>{{ video.title }}</h5>
+									<span>Yükleyen: {{ video["publish"].owner }}</span><br>
+									<span>Yüklenme Tarihi: {{video["publish"].date}}</span>
+									<iframe class="duzenleme" v-bind:src="'//www.recordmp3.co/#/watch?v=' + video.id + '&layout=button&t_waiting_for_worker=Bekleyiniz.&t_press_to_start=Bekleyiniz.&t_converting=Bekleyiniz.&t_done=MP3%20%C4%B0ndir'" scrolling="no" frameborder="no" width="100%" height="50px"></iframe>
+								</div>
+							</div>
+						</article>
+					</div>
+					</div>
+				</div>
+			  </div>
+			</section>
+		</div> 
+	
+</body>
+<style type="text/css">
+	.duzenleme{
+		position:relative;
+		height: 3rem;
+		width: 20rem;
+	}
+	#buton{
+background: #f953c6;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #b91d73, #f953c6);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #b91d73, #f953c6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+	
+	}
+</style>
+<script>
+	new Vue({
+		el: '#form',
+		data: function () {
+		return {
+			gorunum: 'none',
+			result: false,
+			apikey: '150FECF6-D1EB-57C2-5326-5787ED7EDC1B',
+			keyword: ""
+		  }
+		},
+		methods: {
+			apiGonder: function(){
+				fetch('http://api.w3hills.com/youtube/search?api_key=' + this.apikey + '&keyword=' + this.keyword)
+		        .then(result => result.json())
+		        .then(result => {
+		        	this.result = result;
+				})
+				.catch(error => console.error(error))
+			}
+		}
+	})
+</script>
+</html>
