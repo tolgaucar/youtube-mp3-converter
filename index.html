@@ -96,7 +96,7 @@ background: linear-gradient(to right, #b91d73, #f953c6); /* W3C, IE 10+/ Edge, F
 		},
 		methods: {
 			apiGonder: function(){
-				fetch('http://api.w3hills.com/youtube/search?api_key=' + this.apikey + '&keyword=' + this.keyword)
+				fetch('https://cors-anywhere.herokuapp.com/http://api.w3hills.com/youtube/search?api_key=' + this.apikey + '&keyword=' + this.keyword)
 		        .then(result => result.json())
 		        .then(result => {
 		        	this.result = result;
